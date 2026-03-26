@@ -1,14 +1,848 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Physics Activities</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forces in Air — Lift, Drag and Motion</title>
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']],
+        displayMath: [['\\[','\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --panel-2: #eef3fb;
+      --panel-3: #f9fafb;
+      --text: #1f2937;
+      --muted: #5b6472;
+      --accent: #1179c9;
+      --accent-dark: #0c5f9f;
+      --line: #d9e1ee;
+      --good: #1f8f63;
+      --bad: #c23b3b;
+      --amber: #c98b11;
+      --purple: #6d4bc1;
+      --shadow: 0 12px 36px rgba(24, 39, 75, 0.12);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.58;
+    }
+
+    .page {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #1179c9 0%, #4b9fe0 100%);
+      color: #fff;
+      border-radius: 24px;
+      padding: 28px 28px 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 930px;
+      font-size: 17px;
+      opacity: 0.98;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .top-grid {
+      display: grid;
+      grid-template-columns: 1.22fr 0.98fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .section-title {
+      font-size: 26px;
+      margin: 0 0 14px;
+      line-height: 1.2;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .wing-figure {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .wing-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .figure-caption {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .info-band {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .force-box {
+      border-radius: 16px;
+      padding: 14px 14px 12px;
+      color: #fff;
+      min-height: 114px;
+    }
+
+    .force-box h4 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .force-box p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .lift { background: #2680c2; }
+    .weight { background: #4b5563; }
+    .thrust { background: #6d4bc1; }
+    .drag { background: #c98b11; }
+
+    .mini-note {
+      background: var(--panel-2);
+      border: 1px solid #cfe0f4;
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-top: 16px;
+    }
+
+    .mini-note strong {
+      color: var(--accent-dark);
+    }
+
+    .equation-box {
+      background: #f8fbff;
+      border: 1px solid #d7e7f6;
+      border-radius: 16px;
+      padding: 15px 16px;
+      margin-top: 12px;
+    }
+
+    .equation-box .eq {
+      font-size: 23px;
+      margin-bottom: 8px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 4px;
+    }
+
+    .symbol-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .symbol-list li {
+      margin-bottom: 3px;
+    }
+
+    .keyword-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .keyword {
+      background: var(--panel-3);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .keyword h4 {
+      margin: 0 0 6px;
+      color: var(--accent-dark);
+      font-size: 17px;
+    }
+
+    .video-wrap,
+    .sim-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .video-wrap iframe {
+      width: 100%;
+      height: 360px;
+      border: 0;
+      display: block;
+    }
+
+    .sim-wrap iframe {
+      width: 100%;
+      height: 560px;
+      border: 0;
+      display: block;
+      background: #fff;
+    }
+
+    .sim-fallback {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .sim-fallback a {
+      color: var(--accent-dark);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .mcq-grid {
+      display: grid;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .question {
+      background: #fcfdff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .question h4 {
+      margin: 0 0 10px;
+      font-size: 17px;
+    }
+
+    .options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .option {
+      border: 1px solid #d5ddea;
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      user-select: none;
+    }
+
+    .option:hover {
+      border-color: #9ec2e2;
+      transform: translateY(-1px);
+    }
+
+    .option input {
+      margin-right: 10px;
+    }
+
+    .feedback {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .feedback.good {
+      display: block;
+      background: #ebfff5;
+      border: 1px solid #bfe9d3;
+      color: #135a3f;
+    }
+
+    .feedback.bad {
+      display: block;
+      background: #fff1f1;
+      border: 1px solid #efc2c2;
+      color: #8a2626;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .btn-secondary {
+      background: #edf2f8;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .btn-secondary:hover {
+      background: #e3ebf5;
+    }
+
+    .score-box {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #f5f9ff;
+      border: 1px solid #d6e6f8;
+      font-weight: 700;
+      display: none;
+    }
+
+    .footer-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 18px;
+    }
+
+    @media (max-width: 960px) {
+      .intro-grid,
+      .top-grid,
+      .concept-grid,
+      .keyword-grid,
+      .info-band {
+        grid-template-columns: 1fr;
+      }
+
+      .video-wrap iframe,
+      .sim-wrap iframe {
+        height: 380px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 14px;
+      }
+
+      .hero {
+        padding: 22px 18px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .video-wrap iframe,
+      .sim-wrap iframe {
+        height: 320px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="page">
 
-<h1>Physics Activities</h1>
+    <section class="hero">
+      <h1>Forces in Air</h1>
+      <p>
+        Air may seem invisible and easy to overlook, but it can exert important forces on moving objects.
+        When an object travels through air, the interaction between its shape, speed and the surrounding airflow
+        can change the pressure around it and produce forces such as lift and drag. In engineering and physics,
+        understanding these forces helps explain why some objects rise, why some slow down, and why force balance
+        is so important for steady motion. This page introduces the key ideas in a clear way: lift, drag, thrust,
+        weight, pressure differences and a few essential equations.
+      </p>
+    </section>
 
-<img src="../world_map_interactive.svg" width="700">
+    <section class="intro-grid">
+      <div class="card">
+        <h2 class="section-title">Introduction</h2>
+        <p>
+          Objects moving through air experience more than just motion in a straight line. The air around them can
+          push, resist and redirect their motion. In many situations, we describe this using a small set of forces:
+          upward lift, downward weight, forward thrust and backward drag.
+        </p>
+        <p>
+          A useful starting point is to think about <strong>force balance</strong>. If upward and downward forces balance,
+          there is no vertical acceleration. If forward and backward forces balance, the object does not speed up or slow down
+          horizontally. If the forces do not balance, acceleration occurs.
+        </p>
+        <p>
+          One of the most interesting ideas is that moving air can create <strong>pressure differences</strong>.
+          These pressure differences can lead to upward force. At the same time, motion through air also produces
+          <strong>drag</strong>, which resists movement. Together, these ideas help explain how motion in air can be analysed.
+        </p>
+      </div>
 
+      <div class="card">
+        <h2 class="section-title">Airflow around a wing</h2>
+        <div class="wing-figure">
+          <img
+            src="https://raw.githubusercontent.com/physchemib/physics-activities/refs/heads/main/images/Air%20flowing%20around%20an%20airplane%20wing.svg"
+            alt="Air flowing around an airplane wing showing lift force and pressure differences"
+          />
+        </div>
+        <div class="figure-caption">
+          This diagram helps visualise a simplified model of lift: faster airflow above the wing, lower pressure above,
+          and an upward lift force due to the pressure difference.
+        </div>
+      </div>
+    </section>
+
+    <section class="top-grid">
+      <div class="card">
+        <h2 class="section-title">The main forces</h2>
+        <p>
+          When an object moves through air, several forces can act on it at the same time.
+          In simple flight models, the four most common forces are <strong>lift</strong>, <strong>weight</strong>,
+          <strong>thrust</strong> and <strong>drag</strong>.
+        </p>
+
+        <div class="info-band">
+          <div class="force-box lift">
+            <h4>Lift</h4>
+            <p>Upward force caused by air acting on a moving surface.</p>
+          </div>
+          <div class="force-box weight">
+            <h4>Weight</h4>
+            <p>Downward force due to gravity. Near Earth, \(W = mg\).</p>
+          </div>
+          <div class="force-box thrust">
+            <h4>Thrust</h4>
+            <p>Forward force that pushes an object through the air.</p>
+          </div>
+          <div class="force-box drag">
+            <h4>Drag</h4>
+            <p>Resistive force that opposes motion through a fluid.</p>
+          </div>
+        </div>
+
+        <div class="mini-note">
+          <strong>Key idea:</strong> motion depends on the <strong>net force</strong>.
+          If forces balance, motion stays steady. If they do not balance, the object accelerates.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">Essential equations</h2>
+
+        <div class="equation-box">
+          <div class="eq">\(W = mg\)</div>
+          <div class="muted">Weight near the Earth’s surface.</div>
+          <ul class="symbol-list">
+            <li>\(W\) = weight force</li>
+            <li>\(m\) = mass</li>
+            <li>\(g\) = gravitational field strength</li>
+          </ul>
+        </div>
+
+        <div class="equation-box">
+          <div class="eq">\(L = W\)</div>
+          <div class="muted">Condition for steady vertical motion or hovering.</div>
+          <ul class="symbol-list">
+            <li>\(L\) = lift force</li>
+            <li>\(W\) = weight force</li>
+          </ul>
+        </div>
+
+        <div class="equation-box">
+          <div class="eq">\(T = D\)</div>
+          <div class="muted">Condition for constant horizontal speed.</div>
+          <ul class="symbol-list">
+            <li>\(T\) = thrust force</li>
+            <li>\(D\) = drag force</li>
+          </ul>
+        </div>
+
+        <div class="equation-box">
+          <div class="eq">\(F_d = 6 \pi \eta r v\)</div>
+          <div class="muted">Low-speed viscous drag model for a small sphere in a fluid.</div>
+          <ul class="symbol-list">
+            <li>\(F_d\) = drag force</li>
+            <li>\(\eta\) = viscosity of the fluid</li>
+            <li>\(r\) = radius of the sphere</li>
+            <li>\(v\) = speed of the sphere through the fluid</li>
+          </ul>
+        </div>
+
+        <div class="equation-box">
+          <div class="eq">\(F_b = \rho V g\)</div>
+          <div class="muted">Buoyant force in a fluid.</div>
+          <ul class="symbol-list">
+            <li>\(F_b\) = buoyant force</li>
+            <li>\(\rho\) = density of the fluid</li>
+            <li>\(V\) = volume of fluid displaced</li>
+            <li>\(g\) = gravitational field strength</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="concept-grid">
+      <div class="card">
+        <h2 class="section-title">Lift and pressure</h2>
+        <p>
+          In a simplified model, air can move faster over the top of a curved surface and more slowly below it.
+          This can lead to a pressure difference, with lower pressure above and higher pressure below, producing an upward force.
+        </p>
+        <p>
+          At IB level, it is useful to remember the main idea:
+          <strong>pressure differences in a fluid can create a net upward force.</strong>
+        </p>
+        <div class="mini-note">
+          <strong>Keep in mind:</strong> lift is often explained using pressure differences and airflow, but force balance is still the most important starting point for this page.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">Drag and viscosity</h2>
+        <p>
+          Drag is the force that opposes motion through a fluid such as air. In general,
+          drag becomes larger when speed increases. Shape also matters: streamlined objects usually experience less drag.
+        </p>
+        <p>
+          <strong>Viscosity</strong> describes a fluid’s resistance to flow. In some models, especially for small spheres moving slowly in a fluid,
+          viscous drag can be described mathematically using Stokes’ law.
+        </p>
+        <div class="mini-note">
+          <strong>Simple trend:</strong> faster motion through air usually means greater resistance.
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom:18px;">
+      <h2 class="section-title">Keywords</h2>
+      <div class="keyword-grid">
+        <div class="keyword">
+          <h4>Lift</h4>
+          <div>Upward force caused by air acting on a moving object.</div>
+        </div>
+        <div class="keyword">
+          <h4>Drag</h4>
+          <div>Force that opposes motion through air.</div>
+        </div>
+        <div class="keyword">
+          <h4>Thrust</h4>
+          <div>Forward force that drives motion through air.</div>
+        </div>
+        <div class="keyword">
+          <h4>Weight</h4>
+          <div>Downward force caused by gravity.</div>
+        </div>
+        <div class="keyword">
+          <h4>Pressure</h4>
+          <div>Force per unit area exerted by a fluid.</div>
+        </div>
+        <div class="keyword">
+          <h4>Airflow</h4>
+          <div>The movement of air around an object.</div>
+        </div>
+        <div class="keyword">
+          <h4>Viscosity</h4>
+          <div>How much a fluid resists flowing.</div>
+        </div>
+        <div class="keyword">
+          <h4>Buoyancy</h4>
+          <div>Upward force caused by pressure differences in a fluid.</div>
+        </div>
+        <div class="keyword">
+          <h4>Net force</h4>
+          <div>The overall force after all forces are combined.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom:18px;">
+      <h2 class="section-title">Watch</h2>
+      <div class="video-wrap">
+        <iframe
+          src="https://www.youtube.com/embed/Gg0TXNXgz-w"
+          title="How do airplanes fly?"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <p class="muted" style="margin-top:12px;">
+        Main video: use it for a quick overview of lift, drag and force balance.
+      </p>
+
+      <div class="video-wrap" style="margin-top:14px;">
+        <iframe
+          src="https://www.youtube.com/embed/E3i_XHlVCeU"
+          title="Understanding aerodynamic lift"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <p class="muted" style="margin-top:12px;">
+        Extension video: use it to look more carefully at lift, airflow and pressure differences.
+      </p>
+    </section>
+
+    <section class="card" style="margin-bottom:18px;">
+      <h2 class="section-title">Reading the graph</h2>
+      <p>
+        The simulation graph compares the <strong>coefficient of lift</strong> and the <strong>coefficient of drag</strong>
+        as the angle of attack changes. A higher lift coefficient means the wing is producing more lift relative to the conditions,
+        while a higher drag coefficient means more resistance through the air.
+      </p>
+      <p>
+        A useful pattern to notice is that lift increases only up to a point. After that, the graph may show a sudden drop in lift,
+        while drag does not improve. This means that making the angle of attack larger is not always better.
+      </p>
+    </section>
+
+    <section class="card" style="margin-bottom:18px;">
+      <h2 class="section-title">Simulation</h2>
+      <div class="sim-wrap">
+        <iframe
+          src="https://interactives.ck12.org/simulations/physics/airplane/app/index.html"
+          title="CK-12 airplane simulation">
+        </iframe>
+      </div>
+      <div class="sim-fallback">
+        If the simulation does not load inside your platform, open it directly:
+        <a href="https://interactives.ck12.org/simulations/physics/airplane/app/index.html" target="_blank" rel="noopener noreferrer">Open simulation</a>
+      </div>
+
+      <div class="mini-note" style="margin-top:14px;">
+        <strong>Explore the simulation carefully:</strong><br>
+        1. Move the <strong>angle of attack</strong> slider and watch how the <strong>coefficient of lift</strong> and <strong>coefficient of drag</strong> change on the graph.<br>
+        2. Find a small angle of attack where lift increases but drag is still relatively low.<br>
+        3. Increase the angle of attack further and observe what happens when the lift coefficient suddenly drops. This suggests the wing is no longer producing lift effectively.<br>
+        4. Change the <strong>thrust</strong> slider and compare the changes in <strong>air speed</strong> and in the <strong>free body diagram</strong>.<br>
+        5. Use the free body diagram to decide when the forces are balanced and when there is likely to be acceleration.
+      </div>
+
+      <div class="mini-note" style="margin-top:14px;">
+        <strong>What to notice:</strong><br>
+        The graph shows that lift and drag do not change in the same way. As the angle of attack increases, the coefficient of lift usually rises at first, but after a certain point it can fall sharply. At the same time, drag tends to keep increasing. This means that increasing angle of attack is helpful only up to a limit.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Quick check</h2>
+      <p class="muted">Choose one answer for each question, then press <strong>Check answers</strong>.</p>
+
+      <div class="mcq-grid">
+
+        <div class="question" data-answer="c">
+          <h4>1. In the simulation, which control most directly changes both the coefficient of lift and the coefficient of drag on the graph?</h4>
+          <div class="options">
+            <label class="option"><input type="radio" name="q1" value="a"> A. Airplane size</label>
+            <label class="option"><input type="radio" name="q1" value="b"> B. Altitude display</label>
+            <label class="option"><input type="radio" name="q1" value="c"> C. Angle of attack</label>
+            <label class="option"><input type="radio" name="q1" value="d"> D. Free body diagram</label>
+          </div>
+          <div class="feedback"></div>
+        </div>
+
+        <div class="question" data-answer="b">
+          <h4>2. As angle of attack increases from a small value, what usually happens first in the graph?</h4>
+          <div class="options">
+            <label class="option"><input type="radio" name="q2" value="a"> A. Lift coefficient immediately becomes zero</label>
+            <label class="option"><input type="radio" name="q2" value="b"> B. Lift coefficient increases</label>
+            <label class="option"><input type="radio" name="q2" value="c"> C. Drag coefficient disappears</label>
+            <label class="option"><input type="radio" name="q2" value="d"> D. Weight becomes smaller</label>
+          </div>
+          <div class="feedback"></div>
+        </div>
+
+        <div class="question" data-answer="d">
+          <h4>3. What is the main disadvantage of making the angle of attack too large?</h4>
+          <div class="options">
+            <label class="option"><input type="radio" name="q3" value="a"> A. Gravity stops acting</label>
+            <label class="option"><input type="radio" name="q3" value="b"> B. Weight becomes thrust</label>
+            <label class="option"><input type="radio" name="q3" value="c"> C. Drag becomes zero</label>
+            <label class="option"><input type="radio" name="q3" value="d"> D. Lift can drop sharply while drag remains high</label>
+          </div>
+          <div class="feedback"></div>
+        </div>
+
+        <div class="question" data-answer="a">
+          <h4>4. Which force is shown acting downward in the free body diagram?</h4>
+          <div class="options">
+            <label class="option"><input type="radio" name="q4" value="a"> A. Weight</label>
+            <label class="option"><input type="radio" name="q4" value="b"> B. Lift</label>
+            <label class="option"><input type="radio" name="q4" value="c"> C. Drag</label>
+            <label class="option"><input type="radio" name="q4" value="d"> D. Thrust</label>
+          </div>
+          <div class="feedback"></div>
+        </div>
+
+        <div class="question" data-answer="b">
+          <h4>5. If thrust is increased while drag stays smaller, what is the most likely result?</h4>
+          <div class="options">
+            <label class="option"><input type="radio" name="q5" value="a"> A. The object must slow down</label>
+            <label class="option"><input type="radio" name="q5" value="b"> B. The object can accelerate forward</label>
+            <label class="option"><input type="radio" name="q5" value="c"> C. The weight force disappears</label>
+            <label class="option"><input type="radio" name="q5" value="d"> D. The lift coefficient must become negative</label>
+          </div>
+          <div class="feedback"></div>
+        </div>
+
+      </div>
+
+      <div class="button-row">
+        <button class="btn-primary" id="checkBtn">Check answers</button>
+        <button class="btn-secondary" id="resetBtn">Reset</button>
+      </div>
+
+      <div class="score-box" id="scoreBox"></div>
+
+      <div class="footer-note">
+        Tip: the page is designed so students can read, watch, test and check understanding in one place.
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const explanations = {
+      q1: {
+        correct: "Correct. In this simulation, the angle of attack slider directly changes the lift and drag coefficients shown on the graph.",
+        wrong: "Not quite. The graph responds most directly to changes in the angle of attack."
+      },
+      q2: {
+        correct: "Correct. At first, increasing angle of attack usually increases the lift coefficient.",
+        wrong: "Not quite. At small to moderate angles, the lift coefficient usually increases first."
+      },
+      q3: {
+        correct: "Correct. If the angle of attack becomes too large, lift can fall sharply while drag stays high, so performance worsens.",
+        wrong: "Not quite. The key problem at very large angle of attack is that lift can drop sharply while drag remains high."
+      },
+      q4: {
+        correct: "Correct. Weight acts downward in the free body diagram.",
+        wrong: "Not quite. The downward force shown is weight."
+      },
+      q5: {
+        correct: "Correct. If thrust is greater than drag, there is a net forward force, so the object can accelerate forward.",
+        wrong: "Not quite. When thrust is greater than drag, the net force is forward, so forward acceleration is possible."
+      }
+    };
+
+    function checkAnswers() {
+      const questions = document.querySelectorAll('.question');
+      let score = 0;
+
+      questions.forEach((q, index) => {
+        const answer = q.dataset.answer;
+        const qName = `q${index + 1}`;
+        const chosen = q.querySelector(`input[name="${qName}"]:checked`);
+        const feedback = q.querySelector('.feedback');
+
+        feedback.className = 'feedback';
+
+        if (!chosen) {
+          feedback.textContent = 'Please choose an answer.';
+          feedback.classList.add('bad');
+          return;
+        }
+
+        if (chosen.value === answer) {
+          score++;
+          feedback.textContent = explanations[qName].correct;
+          feedback.classList.add('good');
+        } else {
+          feedback.textContent = explanations[qName].wrong;
+          feedback.classList.add('bad');
+        }
+      });
+
+      const scoreBox = document.getElementById('scoreBox');
+      scoreBox.style.display = 'block';
+      scoreBox.textContent = `Score: ${score} / ${questions.length}`;
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.checked = false;
+      });
+
+      document.querySelectorAll('.feedback').forEach(box => {
+        box.textContent = '';
+        box.className = 'feedback';
+      });
+
+      const scoreBox = document.getElementById('scoreBox');
+      scoreBox.style.display = 'none';
+      scoreBox.textContent = '';
+    }
+
+    document.getElementById('checkBtn').addEventListener('click', checkAnswers);
+    document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+  </script>
 </body>
 </html>
