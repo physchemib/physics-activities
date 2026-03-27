@@ -29,8 +29,6 @@
       --line: #d9e1ee;
       --good: #1f8f63;
       --bad: #c23b3b;
-      --amber: #c98b11;
-      --purple: #6d4bc1;
       --shadow: 0 12px 36px rgba(24, 39, 75, 0.12);
       --radius: 18px;
     }
@@ -384,7 +382,7 @@
 
       .video-wrap iframe,
       .sim-wrap iframe {
-        height: 380px;
+        height: 420px;
       }
 
       .hero h1 {
@@ -405,9 +403,12 @@
         padding: 16px;
       }
 
-      .video-wrap iframe,
+      .video-wrap iframe {
+        height: 280px;
+      }
+
       .sim-wrap iframe {
-        height: 320px;
+        height: 420px;
       }
     }
   </style>
@@ -667,15 +668,21 @@
 
     <section class="card" style="margin-bottom:18px;">
       <h2 class="section-title">Simulation</h2>
+
       <div class="sim-wrap">
         <iframe
-          src="https://interactives.ck12.org/simulations/physics/airplane/app/index.html"
-          title="CK-12 airplane simulation">
+          id="iframe"
+          src="https://interactives.ck12.org/simulations/embed.html?embeded=true&interactive=airplane&subject=physics&lang=en&assignment=true"
+          title="CK-12 airplane simulation"
+          allowfullscreen>
         </iframe>
       </div>
+
       <div class="sim-fallback">
-        If the simulation does not load inside your platform, open it directly:
-        <a href="https://interactives.ck12.org/simulations/physics/airplane/app/index.html" target="_blank" rel="noopener noreferrer">Open simulation</a>
+        If the simulation is too small or does not load properly inside your platform, open the full version here:
+        <a href="https://interactives.ck12.org/simulations/physics/airplane/app/index.html" target="_blank" rel="noopener noreferrer">
+          Open full version
+        </a>
       </div>
 
       <div class="mini-note" style="margin-top:14px;">
@@ -764,7 +771,7 @@
       <div class="score-box" id="scoreBox"></div>
 
       <div class="footer-note">
-        
+        Tip: the page is designed so students can read, watch, test and check understanding in one place.
       </div>
     </section>
   </div>
@@ -843,6 +850,4 @@
 
     document.getElementById('checkBtn').addEventListener('click', checkAnswers);
     document.getElementById('resetBtn').addEventListener('click', resetQuiz);
-  </script>
-</body>
-</html>
+ 
